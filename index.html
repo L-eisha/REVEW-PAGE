@@ -27,7 +27,7 @@ a.go{display:block;text-align:center;background:var(--accent);color:var(--accent
 <body>
 <main>
 <h1 id="title">Thanks for staying with us</h1>
-<p class="sub">Not sure what to write? Tap a line to copy it, then paste it in your Google review. Feel free to change it to match your stay.</p>
+<p class="sub">Not sure what to write? Tap a line to copy it, tap the green button, then press and hold in the review box and choose Paste. Change the words to match your stay.</p>
 <div class="list" id="list"></div>
 <a class="go" id="go" href="#" target="_blank" rel="noopener">Write your review on Google</a>
 <p class="note">Please share what you honestly experienced. Your words help future guests.</p>
@@ -37,14 +37,38 @@ a.go{display:block;text-align:center;background:var(--accent);color:var(--accent
 var HOTEL_NAME = "Hotel The Soul of Thar";
 var REVIEW_LINK = "https://www.google.com/travel/search?q=The%20Soul%20Of%20Thar%20-%20A%20Luxury%20Desert%20Retreat%20Sam&g2lb=4965990%2C72471280%2C72573224%2C72686036%2C72803964%2C72880339%2C72882230%2C73064764%2C121529350%2C121608706%2C121921501%2C121951222%2C122078727%2C122093076%2C122097177%2C122121959%2C122134888%2C122258383&hl=en-IN&gl=in&cs=1&ssta=1&ts=CAEaKwopEicyJTB4Mzk0N2RkODkzODcxYzI2MzoweGRlNmEyOTBiNzYyODQ1OTM&qs=CAEyFENnc0lrNHVoc2JlaGlyWGVBUkFCOAI&ap=ugEHcmV2aWV3cw&ictx=111&ved=0CAAQ5JsGahcKEwiAvYqrupuYAxUAAAAAHQAAAAAQCg";
 // ==================================
-var LINES = [
-  "Clean, comfortable room and very friendly staff. We would happily stay again.",
-  "Great location and a smooth check-in. The team was helpful throughout our stay.",
-  "Breakfast was fresh and tasty, and the room was quiet and well kept.",
-  "Good value for money. Staff went out of their way to make us feel welcome.",
-  "Perfect for a family trip. Spacious room, spotless bathroom and kind service.",
-  "Easy booking, polite staff and a peaceful stay. Recommended for business or leisure."
+var POOL = [
+  "Waking up to the sand dunes glowing in the morning light was unforgettable.",
+  "The view of the golden dunes from our stay was simply stunning.",
+  "Sunset over the sand dunes was the highlight of our trip. Beautiful and peaceful.",
+  "Such a calm place with endless dune views. Staff were warm and welcoming.",
+  "We loved sitting outside and watching the dunes change colour through the evening.",
+  "A real desert experience with amazing dune views. Would love to come back.",
+  "Stargazing above the sand dunes at night was magical. Highly recommended.",
+  "The dunes looked unreal at sunrise. Worth the stay for the view alone.",
+  "Peaceful, quiet and surrounded by sand dunes. Exactly the break we needed.",
+  "Beautiful setting right by the dunes, with friendly staff who looked after us well.",
+  "The desert views were breathtaking. Everything felt calm and well taken care of.",
+  "Loved the open sky and the view of the dunes in every direction.",
+  "Great spot to enjoy the Thar desert. The dune views at golden hour were amazing.",
+  "We came for the sand dunes and were not disappointed. Lovely stay overall.",
+  "Soft evening light on the dunes and a cool desert breeze. Absolutely lovely.",
+  "The dune views made our family trip special. Kids and adults both enjoyed it.",
+  "A beautiful desert retreat with wonderful views of the sand dunes. Felt very relaxing.",
+  "Sunrise over the dunes with a hot cup of tea was a perfect start to the day.",
+  "The scenery is unmatched, with rolling dunes as far as you can see.",
+  "Great hospitality and a front row seat to the sand dunes. We will be back.",
+  "Calm nights, clear stars and golden dunes by day. A memorable stay.",
+  "The view of the Thar dunes from the property is something you must see.",
+  "Peaceful desert vibes and stunning dune views. A perfect getaway.",
+  "Every moment here felt close to nature. The sand dune views were the best part."
 ];
+// Show 6 lines at a time. The set changes every 6 hours (at 12am, 6am, 12pm, 6pm IST).
+var PER_SET = 6;
+var SETS = Math.floor(POOL.length / PER_SET);
+var windowNo = Math.floor((Date.now() + 19800000) / 21600000);
+var start = (windowNo % SETS) * PER_SET;
+var LINES = POOL.slice(start, start + PER_SET);
 document.getElementById("title").textContent = "Thanks for staying at " + HOTEL_NAME;
 document.title = HOTEL_NAME + " review";
 document.getElementById("go").href = REVIEW_LINK;
@@ -61,7 +85,7 @@ LINES.forEach(function(t){
   b.onclick = function(){
     var done = function(){
       document.querySelectorAll("button.line").forEach(function(x){x.classList.remove("done");x.querySelector("small").textContent="Tap to copy";});
-      b.classList.add("done"); s.textContent = "Copied. Now tap the button below.";
+      b.classList.add("done"); s.textContent = "Copied. Now tap the button below, then paste it in the review box.";
     };
     try{ navigator.clipboard.writeText(t).then(done, function(){ fallback(t); done(); }); }
     catch(e){ fallback(t); done(); }
